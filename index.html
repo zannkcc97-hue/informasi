@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Sistem Informasi Kelas - Tahun Ajaran 2026/2027</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Segoe UI', Arial, sans-serif;
+  }
+
+  /* ===== HALAMAN 1: PENCARIAN ===== */
+  #page1 {
+    background: #f4f6f9;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+    max-width: 480px;
+    width: 92%;
+    padding: 28px;
+    text-align: center;
+  }
+  h1 {
+    font-size: 20px;
+    color: #1a3d7c;
+    margin-bottom: 4px;
+  }
+  .sub {
+    color: #667;
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+  .desc {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+  input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    margin-bottom: 14px;
+  }
+  button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #1a56db;
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  button:hover { background: #1443ad; }
+  #resultBox {
+    display: none;
+    margin-top: 20px;
+    padding: 16px;
+    background: #eef6ee;
+    border: 1px solid #b7e0b7;
+    border-radius: 8px;
+    text-align: left;
+  }
+  #resultBox p { margin: 4px 0; font-size: 14px; }
+  .status { color: #b8860b; font-weight: 600; }
+  #viewBtn {
+    margin-top: 10px;
+    background: #1a7d3c;
+  }
+  #viewBtn:hover { background: #145f2d; }
+
+  /* ===== HALAMAN 2: HASIL / JUMPSCARE ===== */
+  #page2 {
+    display: none;
+    background: #000;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  #loadingText {
+    color: #ddd;
+    text-align: center;
+    padding-top: 45vh;
+    font-size: 16px;
+  }
+  #scareVideo {
+    display: none;
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HALAMAN 1 ================= -->
+<div id="page1">
+  <div class="card">
+    <h1> SISTEM INFORMASI KELAS</h1>
+    <div class="sub">Tahun Ajaran 2026/2027</div>
+    <div class="desc">
+       Daftar Siswa yang Mengalami Perpindahan Kelas<br>
+      Silakan cari nama kamu untuk melihat status perpindahan kelas.
+    </div>
+    <input type="text" id="nameInput" placeholder="Masukkan nama siswa...">
+    <button id="searchBtn"> Cari Nama Siswa</button>
+
+    <div id="resultBox">
+      <p> <strong>Nama ditemukan!</strong></p>
+      <p class="status">Status: Nama telah ditemukan...</p>
+      <button id="viewBtn">Lihat Hasil</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= HALAMAN 2 ================= -->
+<div id="page2">
+  <div id="loadingText"> Memuat hasil, mohon tunggu...</div>
+  <video id="scareVideo" playsinline></video>
+</div>
+
+<script>
+  // GANTI URL DI BAWAH INI dengan link catbox kamu
+  // (link LANGSUNG ke file video, contoh: https://files.catbox.moe/xxxxxx.mp4)
+  const JUMPSCARE_VIDEO_URL = "https://files.catbox.moe/ywjikv.mp4";
+
+  const page1 = document.getElementById('page1');
+  const page2 = document.getElementById('page2');
+
+  const searchBtn = document.getElementById('searchBtn');
+  const nameInput = document.getElementById('nameInput');
+  const resultBox = document.getElementById('resultBox');
+  const viewBtn = document.getElementById('viewBtn');
+
+  const loadingText = document.getElementById('loadingText');
+  const video = document.getElementById('scareVideo');
+
+  searchBtn.addEventListener('click', () => {
+    if (nameInput.value.trim() === '') {
+      alert('Masukkan nama terlebih dahulu');
+      return;
+    }
+    resultBox.style.display = 'block';
+    searchBtn.disabled = true;
+  });
+
+  viewBtn.addEventListener('click', () => {
+    // "Pindah halaman" -> sembunyikan halaman 1, tampilkan halaman 2
+    page1.style.display = 'none';
+    page2.style.display = 'block';
+
+    // Jeda sebentar biar kesannya "diproses" dulu, baru muncul videonya
+    setTimeout(() => {
+      loadingText.style.display = 'none';
+      video.style.display = 'block';
+      video.src = JUMPSCARE_VIDEO_URL;
+      video.muted = false;
+      video.volume = 1.0;
+
+      video.play().catch(() => {
+        // fallback kalau browser tetap blokir suara otomatis
+        video.muted = true;
+        video.play();
+      });
+    }, 1500);
+  });
+</script>
+
+</body>
+</html>
